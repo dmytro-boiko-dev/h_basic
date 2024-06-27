@@ -4,35 +4,31 @@
 #include "vector.h"
 
 template<typename T>
-Vector<T>::Vector() = default;
-
-template<typename T>
 Vector<T>::Vector(unsigned size) {
     data = new T[size]();
     this->size = size;
 }
 
 template<typename T>
-Vector<T>::Vector(const Vector<T>& other) : size(other.size), last(other.last) {
+Vector<T>::Vector(const Vector<T> &other) : size(other.size), last(other.last) {
     data = new T[size];
-    for (int i = 0; i < last; i++) {
+    for (int i = 0; i < last; ++i) {
         data[i] = other.data[i];
     }
 }
 
 template<typename T>
 Vector<T>::~Vector() {
-    std::cout << "Vector with size " << size << " destroyed." << std::endl;
     delete[] data;
 }
 
 template<typename T>
 void Vector<T>::resize(unsigned newSize, const std::nothrow_t &) noexcept {
     if (newSize > size) {
-        T *temp = new T[newSize]();
+        T *temp = new (std::nothrow) T[newSize]();
         int tempLast = last;
 
-        for (int i = 0; i < last; i++) {
+        for (int i = 0; i < last; ++i) {
             temp[i] = data[i];
         }
 
@@ -48,7 +44,7 @@ template<typename T>
 void Vector<T>::push_back(const T &item) {
     if (last < size) {
         data[last] = item;
-        last++; // update last
+        ++last; // update last
     } else {
         std::cout << "Vector is full. \n";
     }
@@ -76,14 +72,14 @@ void Vector<T>::operator=(const Vector &other) {
     last = other.last;
 
     if (other.last > 0) {
-        for (int i = 0; i < other.last; i++) {
+        for (int i = 0; i < other.last; ++i) {
             data[i] = other.data[i];
         }
     }
 }
 
 template<typename T>
-int Vector<T>::operator[](unsigned index) {
+int Vector<T>::operator[](unsigned index) const {
     // return value only if data is not null and index is less than size or zero
     if (index <= size && data) {
         return data[index];
@@ -97,7 +93,7 @@ Vector<T> Vector<T>::operator+(const Vector &other) {
     Vector new_vector(size + other.size);
 
     if (last > 0 && data) {
-        for (int i = 0; i < last; i++) {
+        for (int i = 0; i < last; ++i) {
             new_vector.data[i] = data[i];
         }
         new_vector.last += last;
@@ -107,7 +103,7 @@ Vector<T> Vector<T>::operator+(const Vector &other) {
     if (other.last > 0) {
 
         // start from first array's last value (i) and iterate through second array (j)
-        for (int i = new_vector.last, j = 0; i < totalLast; i++, j++) {
+        for (int i = new_vector.last, j = 0; i < totalLast; ++i, ++j) {
             new_vector.data[i] = other.data[j];
         }
         new_vector.last = totalLast;

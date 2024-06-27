@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <new>
 
 template<typename T>
 class Vector {
@@ -12,7 +13,8 @@ private:
     int last = 0;
 
 public:
-    Vector();
+
+    Vector() = default;
 
     Vector(unsigned size);
 
@@ -28,7 +30,7 @@ public:
 
     void operator=(const Vector &other);
 
-    int operator[](unsigned index);
+    int operator[](unsigned index) const;
 
     Vector operator+(const Vector &other);
 };
